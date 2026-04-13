@@ -15,6 +15,7 @@ import {
   MINSK_DISTRICTS,
 } from "@/lib/types";
 import ListingCard from "@/components/ListingCard";
+import MultiSelect from "@/components/MultiSelect";
 
 export default function ListingsPage() {
   return (
@@ -32,20 +33,32 @@ function ListingsContent() {
   const searchParams = useSearchParams();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [type, setType] = useState<ListingType | "">(
-    (searchParams.get("type") as ListingType) || ""
-  );
-  const [animal, setAnimal] = useState("");
-  const [breed, setBreed] = useState("");
-  const [color, setColor] = useState("");
-  const [age, setAge] = useState("");
-  const [district, setDistrict] = useState("");
+
+  // Filter state — all arrays for multi-select
+  const [types, setTypes] = useState<string[]>(() => {
+    const t = searchParams.get("type");
+    return t ? [t] : [];
+  });
+  const [animals, setAnimals] = useState<string[]>([]);
+  const [breeds, setBreeds] = useState<string[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
+  const [ages, setAges] = useState<string[]>([]);
+  const [districts, setDistricts] = useState<string[]>([]);
 
   const breedOptions = useMemo(() => {
-    if (animal === "кошка") return BREED_OPTIONS_CAT;
-    if (animal === "собака") return BREED_OPTIONS_DOG;
-    return [...new Set([...BREED_OPTIONS_CAT, ...BREED_OPTIONS_DOG])].sort();
-  }, [animal]);
+    if (animals.length === 1 && animals[0] === "кошка")
+      return BREED_OPTIONS_CAT;
+    if (animals.length === 1 && animals[0] === "собака")
+      return BREED_OPTIONS_DOG;
+    return [
+      ...new Set([...BREED_OPTIONS_CAT, ...BREED_OPTIONS_DOG]),
+    ].sort();
+  }, [animals]);
+
+  // Reset breeds when animal changes
+  useEffect(() => {
+    setBreeds([]);
+  }, [animals]);
 
   const fetchListings = useCallback(async () => {
     setLoading(true);
@@ -57,36 +70,47 @@ function ListingsContent() {
       .order("created_at", { ascending: false })
       .limit(50);
 
-    if (type) query = query.eq("type", type);
-    if (animal) query = query.eq("animal", animal);
-    if (district) query = query.eq("district", district);
-    if (breed) query = query.ilike("breed", `%${breed}%`);
-    if (color) query = query.ilike("color", `%${color}%`);
-    if (age) query = query.eq("age", age);
+    if (types.length > 0) query = query.in("type", types);
+    if (animals.length > 0) query = query.in("animal", animals);
+    if (districts.length > 0) query = query.in("district", districts);
+    if (ages.length > 0) query = query.in("age", ages);
+
+    // breed & color: use ilike with OR for multi-select
+    if (breeds.length > 0) {
+      query = query.or(
+        breeds.map((b) => `breed.ilike.%${b}%`).join(",")
+      );
+    }
+    if (colors.length > 0) {
+      query = query.or(
+        colors.map((c) => `color.ilike.%${c}%`).join(",")
+      );
+    }
 
     const { data } = await query;
     setListings((data as Listing[]) || []);
     setLoading(false);
-  }, [type, animal, breed, color, age, district]);
+  }, [types, animals, breeds, colors, ages, districts]);
 
   useEffect(() => {
     fetchListings();
   }, [fetchListings]);
 
-  // Reset breed when animal changes
-  useEffect(() => {
-    setBreed("");
-  }, [animal]);
-
-  const hasFilters = type || animal || breed || color || age || district;
+  const hasFilters =
+    types.length > 0 ||
+    animals.length > 0 ||
+    breeds.length > 0 ||
+    colors.length > 0 ||
+    ages.length > 0 ||
+    districts.length > 0;
 
   function resetFilters() {
-    setType("");
-    setAnimal("");
-    setBreed("");
-    setColor("");
-    setAge("");
-    setDistrict("");
+    setTypes([]);
+    setAnimals([]);
+    setBreeds([]);
+    setColors([]);
+    setAges([]);
+    setDistricts([]);
   }
 
   return (
@@ -95,94 +119,66 @@ function ListingsContent() {
 
       {/* Filters */}
       <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value as ListingType | "")}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-          >
-            <option value="">Все типы</option>
-            {(Object.keys(TYPE_LABELS) as ListingType[]).map((t) => (
-              <option key={t} value={t}>
-                {TYPE_LABELS[t]}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap gap-3 items-start">
+          <MultiSelect
+            label="Тип"
+            options={Object.values(TYPE_LABELS)}
+            selected={types.map((t) => TYPE_LABELS[t as ListingType] || t)}
+            onChange={(labels) => {
+              const typeKeys = labels.map(
+                (l) =>
+                  (Object.entries(TYPE_LABELS).find(
+                    ([, v]) => v === l
+                  )?.[0] as string) || l
+              );
+              setTypes(typeKeys);
+            }}
+          />
 
-          <select
-            value={animal}
-            onChange={(e) => setAnimal(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-          >
-            <option value="">Все животные</option>
-            {ANIMAL_OPTIONS.map((a) => (
-              <option key={a} value={a}>
-                {a}
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            label="Животное"
+            options={[...ANIMAL_OPTIONS]}
+            selected={animals}
+            onChange={setAnimals}
+          />
 
-          <select
-            value={breed}
-            onChange={(e) => setBreed(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-          >
-            <option value="">Все породы</option>
-            {breedOptions.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            label="Порода"
+            options={[...breedOptions]}
+            selected={breeds}
+            onChange={setBreeds}
+          />
 
-          <select
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-          >
-            <option value="">Все окрасы</option>
-            {COLOR_OPTIONS.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            label="Окрас"
+            options={[...COLOR_OPTIONS]}
+            selected={colors}
+            onChange={setColors}
+          />
 
-          <select
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-          >
-            <option value="">Любой возраст</option>
-            {AGE_OPTIONS.map((a) => (
-              <option key={a} value={a}>
-                {a}
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            label="Возраст"
+            options={[...AGE_OPTIONS]}
+            selected={ages}
+            onChange={setAges}
+          />
 
-          <select
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-          >
-            <option value="">Все районы</option>
-            {MINSK_DISTRICTS.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            label="Район"
+            options={[...MINSK_DISTRICTS]}
+            selected={districts}
+            onChange={setDistricts}
+          />
+
+          {hasFilters && (
+            <button
+              onClick={resetFilters}
+              className="text-sm text-gray-500 hover:text-gray-700 px-3 py-2 underline"
+            >
+              Сбросить все
+            </button>
+          )}
         </div>
-
-        {hasFilters && (
-          <button
-            onClick={resetFilters}
-            className="mt-3 text-sm text-gray-500 hover:text-gray-700 underline"
-          >
-            Сбросить все фильтры
-          </button>
-        )}
       </div>
 
       {/* Results */}

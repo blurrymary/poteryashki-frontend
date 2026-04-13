@@ -42,6 +42,7 @@ export const TYPE_COLORS: Record<ListingType, string> = {
 export const ANIMAL_OPTIONS = ["кошка", "собака", "другое"] as const;
 
 export const BREED_OPTIONS_CAT = [
+  "Дворовая",
   "Метис",
   "Британская",
   "Шотландская вислоухая",
@@ -53,9 +54,11 @@ export const BREED_OPTIONS_CAT = [
   "Русская голубая",
   "Абиссинская",
   "Невская маскарадная",
+  "Другая",
 ] as const;
 
 export const BREED_OPTIONS_DOG = [
+  "Дворняжка",
   "Метис",
   "Немецкая овчарка",
   "Лабрадор",
@@ -71,6 +74,7 @@ export const BREED_OPTIONS_DOG = [
   "Алабай",
   "Стаффордширский терьер",
   "Пудель",
+  "Другая",
 ] as const;
 
 export const COLOR_OPTIONS = [
@@ -84,6 +88,7 @@ export const COLOR_OPTIONS = [
   "Полосатый (табби)",
   "Кремовый",
   "Дымчатый",
+  "Другой",
 ] as const;
 
 export const AGE_OPTIONS = [

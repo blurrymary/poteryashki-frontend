@@ -133,7 +133,6 @@ export default function NewListingPage() {
                 {b}
               </option>
             ))}
-            <option value="__other">Другая (указать)</option>
           </select>
         </div>
 
@@ -152,7 +151,6 @@ export default function NewListingPage() {
                 {c}
               </option>
             ))}
-            <option value="__other">Другой (указать)</option>
           </select>
         </div>
 
