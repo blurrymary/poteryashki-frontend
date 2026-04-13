@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
         breed: (formData.get("breed") as string) || null,
         color: (formData.get("color") as string) || null,
         age: (formData.get("age") as string) || null,
+        sex: (formData.get("sex") as string) || null,
         name: (formData.get("name") as string) || null,
         city: "Минск",
         district: (formData.get("district") as string) || null,

@@ -60,6 +60,12 @@ export default async function HomePage() {
             >
               <span>💝</span> Отдам в добрые руки
             </Link>
+            <Link
+              href="/listings?type=help"
+              className="bg-gradient-to-r from-amber-500 to-orange-500 btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-amber-200 hover:shadow-lg hover:shadow-amber-300 hover:scale-105 transition-all flex items-center gap-2"
+            >
+              <span>🩺</span> Нужна помощь
+            </Link>
           </div>
         </div>
       </section>

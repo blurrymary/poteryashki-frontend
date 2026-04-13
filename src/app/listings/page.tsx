@@ -8,6 +8,7 @@ import {
   ListingType,
   TYPE_LABELS,
   ANIMAL_OPTIONS,
+  SEX_OPTIONS,
   BREED_OPTIONS_CAT,
   BREED_OPTIONS_DOG,
   COLOR_OPTIONS,
@@ -43,6 +44,7 @@ function ListingsContent() {
   const [breeds, setBreeds] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
   const [ages, setAges] = useState<string[]>([]);
+  const [sexes, setSexes] = useState<string[]>([]);
   const [districts, setDistricts] = useState<string[]>([]);
 
   const breedOptions = useMemo(() => {
@@ -74,6 +76,7 @@ function ListingsContent() {
     if (animals.length > 0) query = query.in("animal", animals);
     if (districts.length > 0) query = query.in("district", districts);
     if (ages.length > 0) query = query.in("age", ages);
+    if (sexes.length > 0) query = query.in("sex", sexes);
 
     // breed & color: use ilike with OR for multi-select
     if (breeds.length > 0) {
@@ -90,7 +93,7 @@ function ListingsContent() {
     const { data } = await query;
     setListings((data as Listing[]) || []);
     setLoading(false);
-  }, [types, animals, breeds, colors, ages, districts]);
+  }, [types, animals, breeds, colors, ages, sexes, districts]);
 
   useEffect(() => {
     fetchListings();
@@ -102,6 +105,7 @@ function ListingsContent() {
     breeds.length > 0 ||
     colors.length > 0 ||
     ages.length > 0 ||
+    sexes.length > 0 ||
     districts.length > 0;
 
   function resetFilters() {
@@ -110,6 +114,7 @@ function ListingsContent() {
     setBreeds([]);
     setColors([]);
     setAges([]);
+    setSexes([]);
     setDistricts([]);
   }
 
@@ -163,6 +168,13 @@ function ListingsContent() {
             options={[...AGE_OPTIONS]}
             selected={ages}
             onChange={setAges}
+          />
+
+          <MultiSelect
+            label="Пол"
+            options={[...SEX_OPTIONS]}
+            selected={sexes}
+            onChange={setSexes}
           />
 
           <MultiSelect

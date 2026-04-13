@@ -1,4 +1,4 @@
-export type ListingType = "lost" | "found" | "give_away";
+export type ListingType = "lost" | "found" | "give_away" | "help";
 export type ListingStatus = "active" | "closed";
 export type ModerationStatus = "pending" | "approved" | "rejected";
 
@@ -9,6 +9,7 @@ export interface Listing {
   breed: string | null;
   color: string | null;
   age: string | null;
+  sex: string | null;
   name: string | null;
   city: string;
   district: string | null;
@@ -31,15 +32,19 @@ export const TYPE_LABELS: Record<ListingType, string> = {
   lost: "Пропал",
   found: "Найден",
   give_away: "Отдам в добрые руки",
+  help: "Нужна помощь",
 };
 
 export const TYPE_COLORS: Record<ListingType, string> = {
   lost: "bg-red-500",
   found: "bg-green-500",
   give_away: "bg-blue-500",
+  help: "bg-amber-500",
 };
 
 export const ANIMAL_OPTIONS = ["кошка", "собака", "другое"] as const;
+
+export const SEX_OPTIONS = ["мальчик", "девочка"] as const;
 
 export const BREED_OPTIONS_CAT = [
   "Дворовая",

@@ -71,7 +71,7 @@ export default function MultiSelect({
       </button>
 
       {open && (
-        <div className="absolute z-50 mt-2 glass-strong rounded-xl shadow-xl shadow-violet-100/30 max-h-60 overflow-y-auto min-w-[200px] animate-fade-in">
+        <div className="absolute z-[999] mt-2 glass-strong rounded-xl shadow-xl shadow-violet-100/30 max-h-60 overflow-y-auto min-w-[200px] animate-fade-in">
           {selected.length > 0 && (
             <button
               type="button"

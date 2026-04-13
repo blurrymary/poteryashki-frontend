@@ -5,10 +5,12 @@ const BADGE_CLASS: Record<string, string> = {
   lost: "badge-lost",
   found: "badge-found",
   give_away: "badge-give",
+  help: "badge-help",
 };
 
 export default function ListingCard({ listing }: { listing: Listing }) {
   const timeAgo = getTimeAgo(listing.created_at);
+  const hasName = listing.name && listing.name.trim();
 
   return (
     <Link
@@ -31,23 +33,37 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           </div>
         )}
         <span
-          className={`absolute top-2.5 left-2.5 ${BADGE_CLASS[listing.type]} text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm`}
+          className={`absolute top-2.5 left-2.5 ${BADGE_CLASS[listing.type] || "badge-give"} text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm`}
         >
-          {TYPE_LABELS[listing.type]}
+          {TYPE_LABELS[listing.type] || listing.type}
         </span>
       </div>
       <div className="p-3.5">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="font-bold text-sm text-gray-800">
-            {listing.animal}
-            {listing.breed && `, ${listing.breed}`}
-          </span>
-        </div>
-        {listing.name && (
-          <p className="text-sm text-violet-600 font-medium">
-            {listing.name}
-          </p>
+        {/* Name large */}
+        {hasName ? (
+          <>
+            <h3 className="font-extrabold text-base text-gray-900 leading-tight">
+              {listing.name}
+            </h3>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {listing.animal}
+              {listing.breed && ` · ${listing.breed}`}
+              {listing.sex && ` · ${listing.sex}`}
+            </p>
+          </>
+        ) : (
+          <>
+            <h3 className="font-bold text-base text-gray-900 leading-tight">
+              {listing.animal}
+            </h3>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {listing.breed && listing.breed}
+              {listing.breed && listing.sex && " · "}
+              {listing.sex && listing.sex}
+            </p>
+          </>
         )}
+
         {listing.district && (
           <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
             <span className="text-orange-400">📍</span> {listing.district},{" "}

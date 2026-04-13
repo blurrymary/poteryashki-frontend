@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ANIMAL_OPTIONS,
+  SEX_OPTIONS,
   BREED_OPTIONS_CAT,
   BREED_OPTIONS_DOG,
   COLOR_OPTIONS,
@@ -70,6 +71,7 @@ export default function NewListingPage() {
               { value: "lost", label: "Пропал" },
               { value: "found", label: "Найден" },
               { value: "give_away", label: "Отдам в добрые руки" },
+              { value: "help", label: "Нужна помощь" },
             ].map(({ value, label }) => (
               <label key={value} className="flex items-center gap-2 text-sm">
                 <input
@@ -115,6 +117,22 @@ export default function NewListingPage() {
             className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
             placeholder="Необязательно"
           />
+        </div>
+
+        {/* Sex */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">Пол</label>
+          <select
+            name="sex"
+            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="">Не знаю</option>
+            {SEX_OPTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Breed */}

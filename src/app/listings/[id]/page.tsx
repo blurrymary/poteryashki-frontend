@@ -7,6 +7,7 @@ const BADGE_CLASS: Record<string, string> = {
   lost: "badge-lost",
   found: "badge-found",
   give_away: "badge-give",
+  help: "badge-help",
 };
 
 export const revalidate = 60;
@@ -83,11 +84,21 @@ export default async function ListingPage({
           </div>
 
           {/* Info */}
-          <h1 className="text-2xl font-bold mb-4 gradient-text">
-            {listing.animal}
-            {listing.breed && ` — ${listing.breed}`}
-            {listing.name && ` (${listing.name})`}
-          </h1>
+          {listing.name ? (
+            <>
+              <h1 className="text-3xl font-extrabold gradient-text">{listing.name}</h1>
+              <p className="text-gray-500 text-lg mb-4">
+                {listing.animal}
+                {listing.breed && ` · ${listing.breed}`}
+                {listing.sex && ` · ${listing.sex}`}
+              </p>
+            </>
+          ) : (
+            <h1 className="text-2xl font-bold mb-4 gradient-text">
+              {listing.animal}
+              {listing.breed && ` — ${listing.breed}`}
+            </h1>
+          )}
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             {listing.color && (
@@ -100,6 +111,12 @@ export default async function ListingPage({
               <div className="glass rounded-xl p-3">
                 <span className="text-gray-400 text-xs uppercase tracking-wider">Возраст</span>
                 <p className="font-semibold mt-0.5">{listing.age}</p>
+              </div>
+            )}
+            {listing.sex && (
+              <div className="glass rounded-xl p-3">
+                <span className="text-gray-400 text-xs uppercase tracking-wider">Пол</span>
+                <p className="font-semibold mt-0.5">{listing.sex}</p>
               </div>
             )}
             {listing.district && (

@@ -78,6 +78,9 @@ body {
 .badge-give {
   background: linear-gradient(135deg, #3B82F6, #2563EB);
 }
+.badge-help {
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+}
 
 /* === Animations === */
 @keyframes float {
