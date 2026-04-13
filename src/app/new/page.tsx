@@ -2,12 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ANIMAL_OPTIONS, MINSK_DISTRICTS } from "@/lib/types";
+import {
+  ANIMAL_OPTIONS,
+  BREED_OPTIONS_CAT,
+  BREED_OPTIONS_DOG,
+  COLOR_OPTIONS,
+  AGE_OPTIONS,
+  MINSK_DISTRICTS,
+} from "@/lib/types";
 
 export default function NewListingPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [selectedAnimal, setSelectedAnimal] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -83,6 +91,8 @@ export default function NewListingPage() {
           <select
             name="animal"
             required
+            value={selectedAnimal}
+            onChange={(e) => setSelectedAnimal(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
           >
             <option value="">Выберите</option>
@@ -108,12 +118,23 @@ export default function NewListingPage() {
         {/* Breed */}
         <div>
           <label className="text-sm font-medium text-gray-700">Порода</label>
-          <input
-            type="text"
+          <select
             name="breed"
             className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-            placeholder="Необязательно"
-          />
+          >
+            <option value="">Выберите породу</option>
+            {(selectedAnimal === "кошка"
+              ? BREED_OPTIONS_CAT
+              : selectedAnimal === "собака"
+                ? BREED_OPTIONS_DOG
+                : [...new Set([...BREED_OPTIONS_CAT, ...BREED_OPTIONS_DOG])].sort()
+            ).map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+            <option value="__other">Другая (указать)</option>
+          </select>
         </div>
 
         {/* Color */}
@@ -121,11 +142,36 @@ export default function NewListingPage() {
           <label className="text-sm font-medium text-gray-700">
             Цвет / окрас
           </label>
-          <input
-            type="text"
+          <select
             name="color"
             className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-          />
+          >
+            <option value="">Выберите окрас</option>
+            {COLOR_OPTIONS.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+            <option value="__other">Другой (указать)</option>
+          </select>
+        </div>
+
+        {/* Age */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">
+            Возраст (примерно)
+          </label>
+          <select
+            name="age"
+            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="">Не знаю</option>
+            {AGE_OPTIONS.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* District */}

@@ -85,6 +85,12 @@ export default async function ListingPage({
                 <p className="font-medium">{listing.color}</p>
               </div>
             )}
+            {listing.age && (
+              <div>
+                <span className="text-gray-500 text-sm">Возраст</span>
+                <p className="font-medium">{listing.age}</p>
+              </div>
+            )}
             {listing.district && (
               <div>
                 <span className="text-gray-500 text-sm">Район</span>

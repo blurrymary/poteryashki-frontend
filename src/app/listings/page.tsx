@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import {
@@ -8,13 +8,21 @@ import {
   ListingType,
   TYPE_LABELS,
   ANIMAL_OPTIONS,
+  BREED_OPTIONS_CAT,
+  BREED_OPTIONS_DOG,
+  COLOR_OPTIONS,
+  AGE_OPTIONS,
   MINSK_DISTRICTS,
 } from "@/lib/types";
 import ListingCard from "@/components/ListingCard";
 
 export default function ListingsPage() {
   return (
-    <Suspense fallback={<div className="text-center py-12 text-gray-500">Загрузка...</div>}>
+    <Suspense
+      fallback={
+        <div className="text-center py-12 text-gray-500">Загрузка...</div>
+      }
+    >
       <ListingsContent />
     </Suspense>
   );
@@ -30,7 +38,14 @@ function ListingsContent() {
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
   const [color, setColor] = useState("");
+  const [age, setAge] = useState("");
   const [district, setDistrict] = useState("");
+
+  const breedOptions = useMemo(() => {
+    if (animal === "кошка") return BREED_OPTIONS_CAT;
+    if (animal === "собака") return BREED_OPTIONS_DOG;
+    return [...new Set([...BREED_OPTIONS_CAT, ...BREED_OPTIONS_DOG])].sort();
+  }, [animal]);
 
   const fetchListings = useCallback(async () => {
     setLoading(true);
@@ -47,39 +62,30 @@ function ListingsContent() {
     if (district) query = query.eq("district", district);
     if (breed) query = query.ilike("breed", `%${breed}%`);
     if (color) query = query.ilike("color", `%${color}%`);
+    if (age) query = query.eq("age", age);
 
     const { data } = await query;
     setListings((data as Listing[]) || []);
     setLoading(false);
-  }, [type, animal, breed, color, district]);
+  }, [type, animal, breed, color, age, district]);
 
   useEffect(() => {
     fetchListings();
   }, [fetchListings]);
 
-  // Debounced text inputs
-  const [breedInput, setBreedInput] = useState("");
-  const [colorInput, setColorInput] = useState("");
-
+  // Reset breed when animal changes
   useEffect(() => {
-    const timer = setTimeout(() => setBreed(breedInput), 400);
-    return () => clearTimeout(timer);
-  }, [breedInput]);
+    setBreed("");
+  }, [animal]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setColor(colorInput), 400);
-    return () => clearTimeout(timer);
-  }, [colorInput]);
-
-  const hasFilters = type || animal || breed || color || district;
+  const hasFilters = type || animal || breed || color || age || district;
 
   function resetFilters() {
     setType("");
     setAnimal("");
-    setBreedInput("");
-    setColorInput("");
     setBreed("");
     setColor("");
+    setAge("");
     setDistrict("");
   }
 
@@ -89,7 +95,7 @@ function ListingsContent() {
 
       {/* Filters */}
       <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <select
             value={type}
             onChange={(e) => setType(e.target.value as ListingType | "")}
@@ -116,21 +122,44 @@ function ListingsContent() {
             ))}
           </select>
 
-          <input
-            type="text"
-            value={breedInput}
-            onChange={(e) => setBreedInput(e.target.value)}
-            placeholder="Порода"
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white w-36"
-          />
+          <select
+            value={breed}
+            onChange={(e) => setBreed(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            <option value="">Все породы</option>
+            {breedOptions.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
 
-          <input
-            type="text"
-            value={colorInput}
-            onChange={(e) => setColorInput(e.target.value)}
-            placeholder="Цвет / окрас"
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white w-36"
-          />
+          <select
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            <option value="">Все окрасы</option>
+            {COLOR_OPTIONS.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            <option value="">Любой возраст</option>
+            {AGE_OPTIONS.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
 
           <select
             value={district}
@@ -144,16 +173,16 @@ function ListingsContent() {
               </option>
             ))}
           </select>
-
-          {hasFilters && (
-            <button
-              onClick={resetFilters}
-              className="text-sm text-gray-500 hover:text-gray-700 px-3 py-2 underline"
-            >
-              Сбросить
-            </button>
-          )}
         </div>
+
+        {hasFilters && (
+          <button
+            onClick={resetFilters}
+            className="mt-3 text-sm text-gray-500 hover:text-gray-700 underline"
+          >
+            Сбросить все фильтры
+          </button>
+        )}
       </div>
 
       {/* Results */}
