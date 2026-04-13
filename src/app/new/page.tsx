@@ -192,6 +192,19 @@ export default function NewListingPage() {
           </select>
         </div>
 
+        {/* Event date */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">
+            Дата и время (когда пропал / нашли)
+          </label>
+          <input
+            type="text"
+            name="event_date"
+            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            placeholder="Например: 12 апреля 2026, около 18:00"
+          />
+        </div>
+
         {/* District */}
         <div>
           <label className="text-sm font-medium text-gray-700">

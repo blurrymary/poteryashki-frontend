@@ -64,11 +64,20 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           </>
         )}
 
-        {listing.district && (
-          <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
-            <span className="text-orange-400">📍</span> {listing.district},{" "}
-            {listing.city}
-          </p>
+        {(listing.event_date || listing.district) && (
+          <div className="mt-1.5 space-y-0.5">
+            {listing.event_date && (
+              <p className="text-xs text-violet-500 font-medium flex items-center gap-1">
+                <span>📅</span> {listing.event_date}
+              </p>
+            )}
+            {listing.district && (
+              <p className="text-xs text-gray-500 flex items-center gap-1">
+                <span className="text-orange-400">📍</span> {listing.district},{" "}
+                {listing.city}
+              </p>
+            )}
+          </div>
         )}
         <p className="text-xs text-gray-400 mt-2">{timeAgo}</p>
       </div>

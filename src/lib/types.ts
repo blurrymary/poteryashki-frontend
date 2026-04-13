@@ -10,6 +10,7 @@ export interface Listing {
   color: string | null;
   age: string | null;
   sex: string | null;
+  event_date: string | null;
   name: string | null;
   city: string;
   district: string | null;

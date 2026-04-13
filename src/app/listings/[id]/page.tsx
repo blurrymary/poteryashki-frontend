@@ -2,12 +2,20 @@ import { supabase } from "@/lib/supabase";
 import { Listing, TYPE_LABELS } from "@/lib/types";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import CloseButton from "./CloseButton";
 
 const BADGE_CLASS: Record<string, string> = {
   lost: "badge-lost",
   found: "badge-found",
   give_away: "badge-give",
   help: "badge-help",
+};
+
+const EVENT_LABEL: Record<string, string> = {
+  lost: "Дата пропажи",
+  found: "Дата находки",
+  give_away: "Дата публикации",
+  help: "Дата обращения",
 };
 
 export const revalidate = 60;
@@ -32,11 +40,13 @@ export default async function ListingPage({
 
   if (!listing) notFound();
 
-  const date = new Date(listing.created_at).toLocaleDateString("ru-RU", {
+  const createdDate = new Date(listing.created_at).toLocaleDateString("ru-RU", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
+
+  const isClosed = listing.status === "closed";
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -47,10 +57,17 @@ export default async function ListingPage({
         &larr; Все объявления
       </Link>
 
-      <div className="glass-strong rounded-2xl overflow-hidden shadow-lg shadow-violet-100/20">
+      <div className={`glass-strong rounded-2xl overflow-hidden shadow-lg shadow-violet-100/20 ${isClosed ? "opacity-75" : ""}`}>
+        {/* Closed banner */}
+        {isClosed && (
+          <div className="bg-gray-700 text-white text-center py-2 text-sm font-semibold">
+            ✅ Объявление закрыто
+          </div>
+        )}
+
         {/* Photo */}
         {listing.photo_url ? (
-          <div className="relative aspect-video bg-gray-100">
+          <div className={`relative aspect-video bg-gray-100 ${isClosed ? "grayscale-[50%]" : ""}`}>
             <img
               src={listing.photo_url}
               alt={listing.description || "Фото животного"}
@@ -68,22 +85,22 @@ export default async function ListingPage({
           {/* Badges */}
           <div className="flex items-center gap-2 mb-4">
             <span
-              className={`${BADGE_CLASS[listing.type]} text-white text-sm font-semibold px-3 py-1 rounded-full shadow-sm`}
+              className={`${BADGE_CLASS[listing.type] || "badge-give"} text-white text-sm font-semibold px-3 py-1 rounded-full shadow-sm`}
             >
-              {TYPE_LABELS[listing.type]}
+              {TYPE_LABELS[listing.type] || listing.type}
             </span>
             <span
               className={`text-sm font-medium px-3 py-1 rounded-full ${
-                listing.status === "active"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-500"
+                isClosed
+                  ? "bg-gray-200 text-gray-500"
+                  : "bg-green-100 text-green-700"
               }`}
             >
-              {listing.status === "active" ? "Активно" : "Закрыто"}
+              {isClosed ? "Закрыто" : "Активно"}
             </span>
           </div>
 
-          {/* Info */}
+          {/* Name & species */}
           {listing.name ? (
             <>
               <h1 className="text-3xl font-extrabold gradient-text">{listing.name}</h1>
@@ -97,9 +114,33 @@ export default async function ListingPage({
             <h1 className="text-2xl font-bold mb-4 gradient-text">
               {listing.animal}
               {listing.breed && ` — ${listing.breed}`}
+              {listing.sex && ` (${listing.sex})`}
             </h1>
           )}
 
+          {/* Event date & location — highlighted */}
+          <div className="flex flex-wrap gap-3 mb-5">
+            {listing.event_date && (
+              <div className="bg-violet-50 border border-violet-200 rounded-xl px-4 py-2.5 flex items-center gap-2">
+                <span className="text-violet-500 text-lg">📅</span>
+                <div>
+                  <span className="text-violet-400 text-xs uppercase tracking-wider font-medium">{EVENT_LABEL[listing.type] || "Дата"}</span>
+                  <p className="font-bold text-violet-800 text-sm">{listing.event_date}</p>
+                </div>
+              </div>
+            )}
+            {listing.district && (
+              <div className="bg-orange-50 border border-orange-200 rounded-xl px-4 py-2.5 flex items-center gap-2">
+                <span className="text-orange-500 text-lg">📍</span>
+                <div>
+                  <span className="text-orange-400 text-xs uppercase tracking-wider font-medium">Место</span>
+                  <p className="font-bold text-orange-800 text-sm">{listing.district}, {listing.city}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Info grid */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             {listing.color && (
               <div className="glass rounded-xl p-3">
@@ -111,20 +152,6 @@ export default async function ListingPage({
               <div className="glass rounded-xl p-3">
                 <span className="text-gray-400 text-xs uppercase tracking-wider">Возраст</span>
                 <p className="font-semibold mt-0.5">{listing.age}</p>
-              </div>
-            )}
-            {listing.sex && (
-              <div className="glass rounded-xl p-3">
-                <span className="text-gray-400 text-xs uppercase tracking-wider">Пол</span>
-                <p className="font-semibold mt-0.5">{listing.sex}</p>
-              </div>
-            )}
-            {listing.district && (
-              <div className="glass rounded-xl p-3">
-                <span className="text-gray-400 text-xs uppercase tracking-wider">Район</span>
-                <p className="font-semibold mt-0.5">
-                  {listing.district}, {listing.city}
-                </p>
               </div>
             )}
             {listing.features && (
@@ -143,25 +170,29 @@ export default async function ListingPage({
           )}
 
           {/* Contact */}
-          {listing.contact && (
+          {listing.contact && !isClosed && (
             <div className="gradient-primary rounded-xl p-4 mb-4 text-white">
               <span className="text-white/70 text-sm">Контакт</span>
               <p className="font-bold text-lg">{listing.contact}</p>
             </div>
           )}
 
-          {listing.telegram_post_url && (
-            <a
-              href={listing.telegram_post_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gradient-accent btn-shimmer inline-flex items-center gap-2 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md shadow-violet-200 hover:shadow-lg transition-all"
-            >
-              Открыть в Telegram
-            </a>
-          )}
+          <div className="flex flex-wrap gap-3 items-center">
+            {listing.telegram_post_url && (
+              <a
+                href={listing.telegram_post_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gradient-accent btn-shimmer inline-flex items-center gap-2 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md shadow-violet-200 hover:shadow-lg transition-all"
+              >
+                Открыть в Telegram
+              </a>
+            )}
 
-          <p className="text-sm text-gray-400 mt-6">Опубликовано {date}</p>
+            {!isClosed && <CloseButton listingId={listing.id} />}
+          </div>
+
+          <p className="text-sm text-gray-400 mt-6">Опубликовано {createdDate}</p>
         </div>
       </div>
     </div>
