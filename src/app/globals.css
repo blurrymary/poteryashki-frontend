@@ -1,26 +1,186 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #FF6B35;
+  --primary-dark: #E85D2C;
+  --accent: #7C3AED;
+  --accent-dark: #6D28D9;
+  --bg-warm: #FFF7ED;
+  --bg-purple: #F3E8FF;
+  --bg-blue: #EFF6FF;
+  --text-dark: #1E293B;
+  --text-muted: #64748B;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-warm);
+  --color-foreground: var(--text-dark);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-purple) 50%, var(--bg-blue) 100%);
+  background-attachment: fixed;
+  color: var(--text-dark);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* === Glassmorphism === */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* === Gradients === */
+.gradient-primary {
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #7C3AED, #4F46E5);
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #FF6B35 0%, #F7931E 30%, #7C3AED 70%, #4F46E5 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #FF6B35, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === Badge gradients === */
+.badge-lost {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+}
+.badge-found {
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+}
+.badge-give {
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+}
+
+/* === Animations === */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+.animate-fade-in-delay {
+  animation: fade-in-up 0.5s ease-out 0.15s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fade-in-up 0.5s ease-out 0.3s both;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* === Card hover === */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(124, 58, 237, 0.12), 0 4px 16px rgba(255, 107, 53, 0.08);
+}
+
+/* === Button shimmer === */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.5s;
+}
+.btn-shimmer:hover::after {
+  left: 100%;
+}
+
+/* === Focus ring === */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+/* === Photo overlay === */
+.photo-overlay {
+  position: relative;
+}
+.photo-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+  pointer-events: none;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.4);
 }

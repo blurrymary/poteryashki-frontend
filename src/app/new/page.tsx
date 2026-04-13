@@ -46,17 +46,19 @@ export default function NewListingPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Подать объявление</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        <span className="gradient-text">Подать объявление</span>
+      </h1>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-red-50/80 backdrop-blur border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
           {error}
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl border border-gray-200 p-6 space-y-5"
+        className="glass-strong rounded-2xl p-6 space-y-5 shadow-lg shadow-violet-100/20"
       >
         {/* Type */}
         <fieldset>
@@ -260,7 +262,7 @@ export default function NewListingPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white py-3 rounded-lg font-medium transition-colors"
+          className="w-full gradient-primary btn-shimmer disabled:opacity-50 text-white py-3 rounded-full font-semibold shadow-md shadow-orange-200 hover:shadow-lg hover:shadow-orange-300 transition-all text-base"
         >
           {submitting ? "Отправка..." : "Подать объявление"}
         </button>

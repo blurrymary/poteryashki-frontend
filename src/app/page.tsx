@@ -23,32 +23,42 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3">
-            Потеряшки BY
+      <section className="relative overflow-hidden">
+        {/* Decorative blobs */}
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl" />
+        <div className="absolute -top-10 -right-20 w-80 h-80 bg-violet-300/20 rounded-full blur-3xl" />
+
+        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-20 text-center">
+          <div className="animate-fade-in">
+            <span className="text-5xl md:text-6xl inline-block animate-float">
+              🐾
+            </span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold mt-4 animate-fade-in">
+            <span className="gradient-text">Потеряшки BY</span>
           </h1>
-          <p className="text-gray-600 text-lg mb-6">
-            Помогаем находить пропавших питомцев в Беларуси
+          <p className="text-gray-500 text-lg md:text-xl mt-3 max-w-md mx-auto animate-fade-in-delay">
+            Помогаем находить пропавших питомцев в&nbsp;Беларуси
           </p>
-          <div className="flex justify-center gap-3">
+
+          <div className="flex flex-wrap justify-center gap-3 mt-8 animate-fade-in-delay-2">
             <Link
               href="/listings?type=lost"
-              className="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
+              className="badge-lost btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-red-200 hover:shadow-lg hover:shadow-red-300 hover:scale-105 transition-all flex items-center gap-2"
             >
-              Пропавшие
+              <span>🔍</span> Пропавшие
             </Link>
             <Link
               href="/listings?type=found"
-              className="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
+              className="badge-found btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-green-200 hover:shadow-lg hover:shadow-green-300 hover:scale-105 transition-all flex items-center gap-2"
             >
-              Найденные
+              <span>✅</span> Найденные
             </Link>
             <Link
               href="/listings?type=give_away"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
+              className="badge-give btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 hover:scale-105 transition-all flex items-center gap-2"
             >
-              Отдам в добрые руки
+              <span>💝</span> Отдам в добрые руки
             </Link>
           </div>
         </div>
@@ -60,10 +70,12 @@ export default async function HomePage() {
       {/* Latest listings */}
       <section className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">Последние объявления</h2>
+          <h2 className="text-xl font-bold">
+            <span className="gradient-text-warm">Последние объявления</span>
+          </h2>
           <Link
             href="/listings"
-            className="text-orange-500 hover:text-orange-600 text-sm font-medium"
+            className="text-violet-500 hover:text-violet-600 text-sm font-medium transition-colors"
           >
             Смотреть все &rarr;
           </Link>
@@ -76,9 +88,11 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">
-            <p className="text-4xl mb-3">🐾</p>
-            <p>Объявлений пока нет. Скоро появятся!</p>
+          <div className="glass rounded-2xl text-center py-16 text-gray-500">
+            <p className="text-5xl mb-4 animate-float">🐾</p>
+            <p className="text-lg font-medium">
+              Объявлений пока нет. Скоро появятся!
+            </p>
           </div>
         )}
       </section>

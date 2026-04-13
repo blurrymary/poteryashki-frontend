@@ -16,22 +16,24 @@ export const metadata: Metadata = {
 
 function Header() {
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="glass-strong sticky top-0 z-50 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-2xl">🐾</span>
-          <span className="text-xl font-bold text-gray-900">Потеряшки BY</span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="text-2xl animate-float">🐾</span>
+          <span className="text-xl font-bold gradient-text">
+            Потеряшки BY
+          </span>
         </Link>
         <nav className="flex items-center gap-4">
           <Link
             href="/listings"
-            className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+            className="text-gray-600 hover:text-violet-600 text-sm font-medium transition-colors"
           >
             Все объявления
           </Link>
           <Link
             href="/new"
-            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="gradient-primary btn-shimmer text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md shadow-orange-200 hover:shadow-lg hover:shadow-orange-300 transition-all"
           >
             Подать объявление
           </Link>
@@ -48,13 +50,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-gray-50 text-gray-900">
+      <body className="min-h-full flex flex-col">
         <Header />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-gray-200 py-6 mt-12">
+        <footer className="glass mt-12 py-6">
           <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
-            Потеряшки BY &copy; {new Date().getFullYear()} — Помогаем
-            воссоединять питомцев с хозяевами
+            <span className="gradient-text font-semibold">Потеряшки BY</span>{" "}
+            &copy; {new Date().getFullYear()} — Помогаем воссоединять питомцев
+            с хозяевами 💜
           </div>
         </footer>
       </body>

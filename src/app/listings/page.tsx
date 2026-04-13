@@ -115,10 +115,12 @@ function ListingsContent() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Все объявления</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        <span className="gradient-text">Все объявления</span>
+      </h1>
 
       {/* Filters */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
+      <div className="glass rounded-2xl p-4 mb-6">
         <div className="flex flex-wrap gap-3 items-start">
           <MultiSelect
             label="Тип"
@@ -173,9 +175,9 @@ function ListingsContent() {
           {hasFilters && (
             <button
               onClick={resetFilters}
-              className="text-sm text-gray-500 hover:text-gray-700 px-3 py-2 underline"
+              className="text-sm text-violet-500 hover:text-violet-700 px-3 py-2 font-medium"
             >
-              Сбросить все
+              ✕ Сбросить все
             </button>
           )}
         </div>
@@ -196,9 +198,9 @@ function ListingsContent() {
           </div>
         </>
       ) : (
-        <div className="text-center py-12 text-gray-500">
-          <p className="text-4xl mb-3">🔍</p>
-          <p>Ничего не найдено. Попробуйте изменить фильтры.</p>
+        <div className="glass rounded-2xl text-center py-16 text-gray-500">
+          <p className="text-5xl mb-4">🔍</p>
+          <p className="text-lg font-medium">Ничего не найдено. Попробуйте изменить фильтры.</p>
         </div>
       )}
     </div>
