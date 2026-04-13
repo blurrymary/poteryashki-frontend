@@ -125,7 +125,7 @@ function ListingsContent() {
       </h1>
 
       {/* Filters */}
-      <div className="glass rounded-2xl p-4 mb-6">
+      <div className="glass rounded-2xl p-4 mb-6 relative z-[100]">
         <div className="flex flex-wrap gap-3 items-start">
           <MultiSelect
             label="Тип"
