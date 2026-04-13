@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { Listing } from "@/lib/types";
 import ListingCard from "@/components/ListingCard";
+import MapSection from "@/components/MapSection";
 import Link from "next/link";
 
 export const revalidate = 60;
@@ -52,6 +53,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Map */}
+      <MapSection />
 
       {/* Latest listings */}
       <section className="max-w-6xl mx-auto px-4 py-8">

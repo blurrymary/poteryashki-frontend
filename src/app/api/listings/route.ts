@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
@@ -79,6 +80,9 @@ export async function POST(request: NextRequest) {
     // GPT moderation (async, don't wait)
     moderateWithGPT(listingId, description).catch(console.error);
 
+    // Send confirmation email (async)
+    sendConfirmationEmail(email, listingId).catch(console.error);
+
     return NextResponse.json({ id: listingId });
   } catch (err) {
     console.error("API error:", err);
@@ -87,6 +91,28 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+async function sendConfirmationEmail(email: string, listingId: string) {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  if (!RESEND_API_KEY) return;
+
+  const resend = new Resend(RESEND_API_KEY);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://poteryashki-by.netlify.app";
+
+  await resend.emails.send({
+    from: "Потеряшки BY <onboarding@resend.dev>",
+    to: email,
+    subject: "Ваше объявление принято",
+    html: `
+      <h2>Спасибо за ваше объявление!</h2>
+      <p>Ваше объявление принято и будет опубликовано после проверки модератором.</p>
+      <p>Ссылка на объявление: <a href="${siteUrl}/listings/${listingId}">${siteUrl}/listings/${listingId}</a></p>
+      <p>Обычно проверка занимает несколько минут.</p>
+      <br>
+      <p>С уважением,<br>Команда Потеряшки BY</p>
+    `,
+  });
 }
 
 async function moderateWithGPT(listingId: string, text: string) {
