@@ -30,6 +30,41 @@ export default function ListingsPage() {
   );
 }
 
+const TYPE_BUTTONS = [
+  {
+    key: "lost",
+    label: "Пропал",
+    icon: "🔍",
+    desc: "Хозяин ищет питомца",
+    activeClass: "badge-lost",
+    inactiveClass: "glass text-red-500 hover:bg-red-50",
+  },
+  {
+    key: "found",
+    label: "Найден",
+    icon: "📦",
+    desc: "Найдено животное, ищем хозяина",
+    activeClass: "badge-found",
+    inactiveClass: "glass text-green-600 hover:bg-green-50",
+  },
+  {
+    key: "give_away",
+    label: "Ищет дом",
+    icon: "💝",
+    desc: "Отдают в добрые руки",
+    activeClass: "badge-give",
+    inactiveClass: "glass text-blue-500 hover:bg-blue-50",
+  },
+  {
+    key: "help",
+    label: "Нужна помощь",
+    icon: "🩺",
+    desc: "Донор крови, сбор на лечение",
+    activeClass: "badge-help",
+    inactiveClass: "glass text-amber-600 hover:bg-amber-50",
+  },
+];
+
 function ListingsContent() {
   const searchParams = useSearchParams();
   const [listings, setListings] = useState<Listing[]>([]);
@@ -124,24 +159,31 @@ function ListingsContent() {
         <span className="gradient-text">Все объявления</span>
       </h1>
 
+      {/* Type filter — always visible pills */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {TYPE_BUTTONS.map(({ key, label, icon, activeClass, inactiveClass }) => {
+          const active = types.includes(key);
+          return (
+            <button
+              key={key}
+              onClick={() =>
+                setTypes(active ? types.filter((t) => t !== key) : [...types, key])
+              }
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${
+                active
+                  ? `${activeClass} text-white shadow-md scale-105`
+                  : `${inactiveClass} hover:scale-105`
+              }`}
+            >
+              <span>{icon}</span> {label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Filters */}
       <div className="glass rounded-2xl p-4 mb-6 relative z-[100]">
         <div className="flex flex-wrap gap-3 items-start">
-          <MultiSelect
-            label="Тип"
-            options={Object.values(TYPE_LABELS)}
-            selected={types.map((t) => TYPE_LABELS[t as ListingType] || t)}
-            onChange={(labels) => {
-              const typeKeys = labels.map(
-                (l) =>
-                  (Object.entries(TYPE_LABELS).find(
-                    ([, v]) => v === l
-                  )?.[0] as string) || l
-              );
-              setTypes(typeKeys);
-            }}
-          />
-
           <MultiSelect
             label="Животное"
             options={[...ANIMAL_OPTIONS]}
