@@ -21,64 +21,44 @@ export default function MultiSelect({ label, options, selected, onChange }: Mult
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  function toggle(value: string) {
-    onChange(selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]);
-  }
-
-  const displayText =
-    selected.length === 0
-      ? label
-      : selected.length <= 2
-        ? selected.join(", ")
-        : `${selected.slice(0, 1).join(", ")} +${selected.length - 1}`;
+  const displayText = selected.length === 0 ? label
+    : selected.length <= 2 ? selected.join(", ")
+    : `${selected[0]} +${selected.length - 1}`;
 
   return (
     <div ref={ref} className="relative">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className={`surface rounded-lg px-3 py-2 text-sm text-left min-w-[130px] flex items-center justify-between gap-2 transition-all ${
+        className={`rounded-full px-4 py-2 text-sm flex items-center gap-2 transition-all border ${
           selected.length > 0
-            ? "border-[var(--accent)] text-[var(--text)]"
-            : "text-[var(--text-muted)] hover:border-[var(--border-hover)]"
+            ? "border-[var(--text)] text-[var(--text)] bg-[var(--bg-secondary)]"
+            : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--border-hover)]"
         }`}
       >
-        <span className="truncate">{displayText}</span>
-        <svg className={`w-3.5 h-3.5 flex-shrink-0 opacity-50 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <span className="truncate max-w-[120px]">{displayText}</span>
+        <svg className={`w-3 h-3 flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute z-[999] mt-1 surface-elevated rounded-lg shadow-2xl shadow-black/50 max-h-60 overflow-y-auto min-w-[180px] animate-fade-in">
+        <div className="absolute z-[999] mt-2 bg-white rounded-xl shadow-lg shadow-black/8 border border-[var(--border)] max-h-60 overflow-y-auto min-w-[200px] animate-fade-in">
           {selected.length > 0 && (
-            <button
-              type="button"
-              onClick={() => onChange([])}
-              className="w-full text-left px-3 py-2 text-xs text-[var(--accent)] hover:bg-[var(--accent-dim)] border-b border-[var(--border)] font-medium"
-            >
+            <button type="button" onClick={() => onChange([])}
+              className="w-full text-left px-4 py-2.5 text-xs text-[var(--accent)] hover:bg-[var(--bg-secondary)] border-b border-[var(--border)] font-medium">
               Сбросить
             </button>
           )}
           {options.map((option) => (
-            <label
-              key={option}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-[var(--bg-card)] cursor-pointer text-sm transition-colors"
-            >
-              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-                selected.includes(option)
-                  ? "bg-[var(--accent)] border-[var(--accent)]"
-                  : "border-[var(--border-hover)]"
-              }`}>
-                {selected.includes(option) && (
-                  <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-              <span className={selected.includes(option) ? "text-[var(--text)]" : "text-[var(--text-secondary)]"}>
-                {option}
-              </span>
+            <label key={option} className="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--bg-secondary)] cursor-pointer text-sm transition-colors">
+              <input
+                type="checkbox"
+                checked={selected.includes(option)}
+                onChange={() => onChange(selected.includes(option) ? selected.filter(v => v !== option) : [...selected, option])}
+                className="rounded border-[var(--border-hover)] text-[var(--accent)] focus:ring-[var(--accent)]"
+              />
+              {option}
             </label>
           ))}
         </div>

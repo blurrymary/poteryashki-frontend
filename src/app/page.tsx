@@ -8,20 +8,20 @@ export const revalidate = 60;
 
 async function getLatestListings(): Promise<Listing[]> {
   const { data } = await supabase
-    .from("listings")
-    .select("*")
-    .eq("moderation_status", "approved")
-    .eq("status", "active")
-    .order("created_at", { ascending: false })
-    .limit(12);
+    .from("listings").select("*")
+    .eq("moderation_status", "approved").eq("status", "active")
+    .order("created_at", { ascending: false }).limit(12);
   return (data as Listing[]) || [];
 }
 
 async function getCounts() {
-  const { count: lost } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active").eq("type", "lost");
-  const { count: found } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active").eq("type", "found");
-  const { count: total } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active");
-  return { lost: lost || 0, found: found || 0, total: total || 0 };
+  const q = (type?: string) => {
+    let b = supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active");
+    if (type) b = b.eq("type", type);
+    return b;
+  };
+  const [{ count: total }, { count: lost }, { count: found }] = await Promise.all([q(), q("lost"), q("found")]);
+  return { total: total || 0, lost: lost || 0, found: found || 0 };
 }
 
 export default async function HomePage() {
@@ -30,44 +30,37 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="border-b border-[var(--border)]">
-        <div className="max-w-6xl mx-auto px-4 py-20 md:py-28">
-          <p className="text-[var(--accent)] text-sm font-medium tracking-wide uppercase mb-4">
-            Агрегатор объявлений
-          </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] max-w-2xl">
-            Помогаем находить
-            <br />
-            <span className="gradient-text">пропавших питомцев</span>
+      <section className="bg-[var(--bg-secondary)]">
+        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight max-w-xl">
+            Найдите своего <br />пропавшего питомца
           </h1>
-          <p className="text-[var(--text-secondary)] text-lg mt-5 max-w-lg">
-            Автоматический мониторинг Telegram-каналов Беларуси. Все объявления о пропавших и найденных животных в одном месте.
+          <p className="text-[var(--text-secondary)] text-lg mt-4 max-w-md">
+            Мониторим Telegram-каналы Беларуси. Все объявления о потерянных и найденных животных — в одном месте.
           </p>
 
-          {/* Stats */}
-          <div className="flex gap-8 mt-10">
-            <div>
-              <p className="text-3xl font-bold">{counts.total}</p>
-              <p className="text-[var(--text-muted)] text-sm mt-0.5">объявлений</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-[var(--red)]">{counts.lost}</p>
-              <p className="text-[var(--text-muted)] text-sm mt-0.5">ищут хозяина</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-[var(--green)]">{counts.found}</p>
-              <p className="text-[var(--text-muted)] text-sm mt-0.5">найдены</p>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="flex gap-3 mt-10">
-            <Link href="/listings" className="btn-primary px-5 py-2.5 rounded-lg text-sm">
+          <div className="flex gap-3 mt-8">
+            <Link href="/listings" className="btn-primary px-6 py-3 text-sm">
               Смотреть объявления
             </Link>
-            <Link href="/new" className="btn-ghost px-5 py-2.5 rounded-lg text-sm">
-              Подать объявление
+            <Link href="/new" className="btn-secondary px-6 py-3 text-sm">
+              Я потерял питомца
             </Link>
+          </div>
+
+          <div className="flex gap-10 mt-12">
+            <div>
+              <p className="text-3xl font-bold">{counts.total}</p>
+              <p className="text-[var(--text-secondary)] text-sm">объявлений</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold">{counts.lost}</p>
+              <p className="text-[var(--text-secondary)] text-sm">ищут хозяев</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold">{counts.found}</p>
+              <p className="text-[var(--text-secondary)] text-sm">нашлись</p>
+            </div>
           </div>
         </div>
       </section>
@@ -76,26 +69,23 @@ export default async function HomePage() {
       <MapSection />
 
       {/* Latest listings */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
+      <section className="max-w-6xl mx-auto px-6 py-12">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-lg font-semibold">Последние объявления</h2>
-          <Link
-            href="/listings"
-            className="text-[var(--accent)] hover:text-[var(--accent-hover)] text-sm transition-colors"
-          >
-            Все объявления &rarr;
+          <h2 className="text-xl font-bold">Последние объявления</h2>
+          <Link href="/listings" className="text-[var(--accent)] hover:underline text-sm font-medium">
+            Все объявления
           </Link>
         </div>
 
         {listings.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {listings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
         ) : (
-          <div className="surface rounded-xl text-center py-20 text-[var(--text-muted)]">
-            <p className="text-lg">Объявлений пока нет</p>
+          <div className="text-center py-20 text-[var(--text-secondary)]">
+            <p className="text-lg font-medium">Объявлений пока нет</p>
             <p className="text-sm mt-1">Парсер работает — скоро появятся</p>
           </div>
         )}

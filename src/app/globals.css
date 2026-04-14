@@ -1,21 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #09090b;
-  --bg-card: #18181b;
-  --bg-elevated: #1f1f23;
-  --border: #27272a;
-  --border-hover: #3f3f46;
-  --text: #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --accent: #a78bfa;
-  --accent-hover: #c4b5fd;
-  --accent-dim: rgba(167, 139, 250, 0.15);
-  --red: #f87171;
-  --green: #4ade80;
-  --blue: #60a5fa;
-  --amber: #fbbf24;
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --border: #ebebeb;
+  --border-hover: #dddddd;
+  --text: #222222;
+  --text-secondary: #717171;
+  --text-muted: #b0b0b0;
+  --accent: #FF385C;
+  --accent-hover: #E31C5F;
+  --accent-light: #FFF0F3;
 }
 
 @theme inline {
@@ -34,94 +29,77 @@ body {
 
 /* === Surfaces === */
 .surface {
-  background: var(--bg-card);
+  background: var(--bg);
   border: 1px solid var(--border);
 }
 
-.surface-elevated {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
+/* === Card === */
+.card {
+  background: var(--bg);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 /* === Badges === */
 .badge-lost {
-  background: rgba(248, 113, 113, 0.15);
-  color: var(--red);
-  border: 1px solid rgba(248, 113, 113, 0.3);
+  background: #FEF2F2;
+  color: #DC2626;
 }
 .badge-found {
-  background: rgba(74, 222, 128, 0.15);
-  color: var(--green);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: #F0FDF4;
+  color: #16A34A;
 }
 .badge-give {
-  background: rgba(96, 165, 250, 0.15);
-  color: var(--blue);
-  border: 1px solid rgba(96, 165, 250, 0.3);
+  background: #EFF6FF;
+  color: #2563EB;
 }
 .badge-help {
-  background: rgba(251, 191, 36, 0.15);
-  color: var(--amber);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: #FFFBEB;
+  color: #D97706;
 }
 
-/* === Glow effects === */
-.glow-accent {
-  box-shadow: 0 0 20px rgba(167, 139, 250, 0.1), 0 0 60px rgba(167, 139, 250, 0.05);
-}
-.glow-red {
-  box-shadow: 0 0 20px rgba(248, 113, 113, 0.1);
-}
-.glow-green {
-  box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
-}
-
-/* === Card hover === */
-.card-hover {
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.card-hover:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-hover);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-}
-
-/* === Button styles === */
+/* === Buttons === */
 .btn-primary {
   background: var(--accent);
-  color: var(--bg);
+  color: white;
   font-weight: 600;
+  border-radius: 8px;
   transition: all 0.15s ease;
 }
 .btn-primary:hover {
   background: var(--accent-hover);
-  box-shadow: 0 0 20px rgba(167, 139, 250, 0.25);
 }
-.btn-ghost {
-  background: transparent;
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text);
   border: 1px solid var(--border);
-  color: var(--text-secondary);
+  font-weight: 500;
+  border-radius: 8px;
   transition: all 0.15s ease;
 }
-.btn-ghost:hover {
-  border-color: var(--border-hover);
-  color: var(--text);
+.btn-secondary:hover {
+  border-color: var(--text);
 }
 
 /* === Focus === */
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px var(--accent-dim);
+  border-color: var(--text) !important;
+  box-shadow: 0 0 0 2px rgba(34, 34, 34, 0.1);
 }
 
 /* === Animations === */
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
-  animation: fade-in-up 0.3s ease-out both;
+  animation: fade-in-up 0.25s ease-out both;
 }
 
 /* === Scrollbar === */
@@ -130,10 +108,8 @@ input:focus, select:focus, textarea:focus {
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
 
-/* === Gradient text === */
-.gradient-text {
-  background: linear-gradient(135deg, #fafafa 0%, #a1a1aa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* === Divider === */
+.divider {
+  height: 1px;
+  background: var(--border);
 }

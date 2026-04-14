@@ -31,10 +31,10 @@ export default function ListingsPage() {
 }
 
 const TYPE_BUTTONS = [
-  { key: "lost", label: "Пропал", color: "var(--red)" },
-  { key: "found", label: "Найден", color: "var(--green)" },
-  { key: "give_away", label: "Ищет дом", color: "var(--blue)" },
-  { key: "help", label: "Нужна помощь", color: "var(--amber)" },
+  { key: "lost", label: "Пропал", color: "#DC2626", bg: "#FEF2F2" },
+  { key: "found", label: "Найден", color: "#16A34A", bg: "#F0FDF4" },
+  { key: "give_away", label: "Ищет дом", color: "#2563EB", bg: "#EFF6FF" },
+  { key: "help", label: "Нужна помощь", color: "#D97706", bg: "#FFFBEB" },
 ];
 
 function ListingsContent() {
@@ -163,7 +163,7 @@ function ListingsContent() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Поиск по кличке, породе, описанию..."
-            className="w-full surface rounded-lg pl-10 pr-10 py-2.5 text-sm bg-[var(--bg-card)] transition-all"
+            className="w-full rounded-full pl-10 pr-10 py-2.5 text-sm bg-[var(--bg-secondary)] border border-transparent transition-all"
           />
           {search && (
             <button
@@ -178,14 +178,17 @@ function ListingsContent() {
 
       {/* Type filter */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {TYPE_BUTTONS.map(({ key, label, color }) => {
+        {TYPE_BUTTONS.map(({ key, label, color, bg }) => {
           const active = types.includes(key);
           return (
             <button
               key={key}
               onClick={() => setTypes(active ? types.filter((t) => t !== key) : [...types, key])}
-              className="surface rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center gap-2"
-              style={active ? { borderColor: color, color, background: `color-mix(in srgb, ${color} 10%, transparent)` } : {}}
+              className="rounded-full px-4 py-2 text-sm font-medium transition-all flex items-center gap-2 border"
+              style={active
+                ? { borderColor: color, color, background: bg }
+                : { borderColor: "var(--border)", color: "var(--text-secondary)" }
+              }
             >
               <span className="w-2 h-2 rounded-full" style={{ background: color }} />
               {label}
@@ -195,7 +198,7 @@ function ListingsContent() {
       </div>
 
       {/* Filters */}
-      <div className="surface rounded-xl p-3 mb-4 relative z-[100]">
+      <div className="bg-[var(--bg-secondary)] rounded-xl p-3 mb-4 relative z-[100]">
         <div className="flex flex-wrap gap-3 items-start">
           <MultiSelect
             label="Животное"
@@ -242,7 +245,7 @@ function ListingsContent() {
           {hasFilters && (
             <button
               onClick={resetFilters}
-              className="text-sm text-[var(--accent)] hover:text-[var(--accent-hover)] px-3 py-2 font-medium transition-colors"
+              className="text-sm text-[var(--accent)] hover:underline px-3 py-2 font-medium"
             >
               Сбросить
             </button>
@@ -257,7 +260,7 @@ function ListingsContent() {
             (tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 bg-[var(--accent-dim)] text-[var(--accent)] text-xs font-medium px-2.5 py-1 rounded-md"
+                className="inline-flex items-center gap-1.5 bg-[var(--bg-secondary)] text-[var(--text-secondary)] text-xs font-medium px-2.5 py-1 rounded-full border border-[var(--border)]"
               >
                 {tag}
                 <button

@@ -50,14 +50,14 @@ export default function NewListingPage() {
       <h1 className="text-2xl font-bold mb-6">Подать объявление</h1>
 
       {error && (
-        <div className="surface border-[var(--red)]/30 text-[var(--red)] px-4 py-3 rounded-lg mb-6 text-sm">
+        <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
           {error}
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="surface rounded-xl p-6 space-y-5"
+        className="rounded-2xl border border-[var(--border)] p-6 md:p-8 space-y-5"
       >
         {/* Type */}
         <fieldset>
@@ -95,7 +95,7 @@ export default function NewListingPage() {
             required
             value={selectedAnimal}
             onChange={(e) => setSelectedAnimal(e.target.value)}
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
           >
             <option value="">Выберите</option>
             {ANIMAL_OPTIONS.map((a) => (
@@ -112,7 +112,7 @@ export default function NewListingPage() {
           <input
             type="text"
             name="name"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
             placeholder="Необязательно"
           />
         </div>
@@ -122,7 +122,7 @@ export default function NewListingPage() {
           <label className="text-sm font-medium text-[var(--text-secondary)]">Пол</label>
           <select
             name="sex"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
           >
             <option value="">Не знаю</option>
             {SEX_OPTIONS.map((s) => (
@@ -138,7 +138,7 @@ export default function NewListingPage() {
           <label className="text-sm font-medium text-[var(--text-secondary)]">Порода</label>
           <select
             name="breed"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
           >
             <option value="">Выберите породу</option>
             {(selectedAnimal === "кошка"
@@ -161,7 +161,7 @@ export default function NewListingPage() {
           </label>
           <select
             name="color"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
           >
             <option value="">Выберите окрас</option>
             {COLOR_OPTIONS.map((c) => (
@@ -179,7 +179,7 @@ export default function NewListingPage() {
           </label>
           <select
             name="age"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
           >
             <option value="">Не знаю</option>
             {AGE_OPTIONS.map((a) => (
@@ -198,7 +198,7 @@ export default function NewListingPage() {
           <input
             type="text"
             name="event_date"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
             placeholder="Например: 12 апреля 2026, около 18:00"
           />
         </div>
@@ -210,7 +210,7 @@ export default function NewListingPage() {
           </label>
           <select
             name="district"
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
           >
             <option value="">Выберите район</option>
             {MINSK_DISTRICTS.map((d) => (
@@ -229,7 +229,7 @@ export default function NewListingPage() {
           <textarea
             name="features"
             rows={2}
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
             placeholder="Шрам на ухе, ошейник красного цвета..."
           />
         </div>
@@ -243,7 +243,7 @@ export default function NewListingPage() {
             name="description"
             rows={3}
             required
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
             placeholder="Опишите обстоятельства..."
           />
         </div>
@@ -269,7 +269,7 @@ export default function NewListingPage() {
             type="text"
             name="contact"
             required
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
             placeholder="+375291234567 или @username"
           />
         </div>
@@ -283,7 +283,7 @@ export default function NewListingPage() {
             type="email"
             name="email"
             required
-            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
+            className="mt-1 block w-full bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm"
             placeholder="your@email.com"
           />
         </div>
