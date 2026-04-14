@@ -6,25 +6,20 @@ const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 
 export default function MapSection() {
   return (
-    <section className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-xl font-bold mb-4">
-        <span className="gradient-text-warm">Карта</span>
-      </h2>
-      <div className="glass rounded-2xl overflow-hidden p-1">
+    <section className="max-w-6xl mx-auto px-4 py-12">
+      <h2 className="text-lg font-semibold mb-4">Карта</h2>
+      <div className="surface rounded-xl overflow-hidden">
         <MapView />
       </div>
-      <div className="flex gap-5 mt-3 text-xs text-gray-500">
+      <div className="flex gap-5 mt-3 text-xs text-[var(--text-muted)]">
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full badge-lost inline-block shadow-sm" />{" "}
-          Пропал
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--red)] inline-block" /> Пропал
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full badge-found inline-block shadow-sm" />{" "}
-          Найден
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--green)] inline-block" /> Найден
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full badge-give inline-block shadow-sm" />{" "}
-          Отдам
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--blue)] inline-block" /> Ищет дом
         </span>
       </div>
     </section>

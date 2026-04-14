@@ -16,26 +16,26 @@ export const metadata: Metadata = {
 
 function Header() {
   return (
-    <header className="glass-strong sticky top-0 z-50 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="text-2xl animate-float">🐾</span>
-          <span className="text-xl font-bold gradient-text">
-            Потеряшки BY
-          </span>
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-xl">
+      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-[var(--accent)] flex items-center justify-center">
+            <span className="text-black text-sm font-bold">P</span>
+          </div>
+          <span className="text-sm font-semibold tracking-tight">Потеряшки BY</span>
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-6">
           <Link
             href="/listings"
-            className="text-gray-600 hover:text-violet-600 text-sm font-medium transition-colors"
+            className="text-[var(--text-muted)] hover:text-[var(--text)] text-sm transition-colors"
           >
-            Все объявления
+            Объявления
           </Link>
           <Link
             href="/new"
-            className="gradient-primary btn-shimmer text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md shadow-orange-200 hover:shadow-lg hover:shadow-orange-300 transition-all"
+            className="btn-primary px-4 py-1.5 rounded-lg text-sm"
           >
-            Подать объявление
+            Подать
           </Link>
         </nav>
       </div>
@@ -53,11 +53,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Header />
         <main className="flex-1">{children}</main>
-        <footer className="glass mt-12 py-6">
-          <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
-            <span className="gradient-text font-semibold">Потеряшки BY</span>{" "}
-            &copy; {new Date().getFullYear()} — Помогаем воссоединять питомцев
-            с хозяевами 💜
+        <footer className="border-t border-[var(--border)] py-6 mt-16">
+          <div className="max-w-6xl mx-auto px-4 text-center text-xs text-[var(--text-muted)]">
+            Потеряшки BY &copy; {new Date().getFullYear()}
           </div>
         </footer>
       </body>

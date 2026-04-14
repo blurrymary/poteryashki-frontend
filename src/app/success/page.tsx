@@ -2,28 +2,23 @@ import Link from "next/link";
 
 export default function SuccessPage() {
   return (
-    <div className="max-w-lg mx-auto px-4 py-16 text-center">
-      <div className="glass-strong rounded-3xl p-10 shadow-lg shadow-violet-100/20">
-        <div className="text-6xl mb-5 animate-float">🎉</div>
-        <h1 className="text-2xl font-bold mb-3">
-          <span className="gradient-text">Объявление отправлено!</span>
-        </h1>
-        <p className="text-gray-500 mb-8 leading-relaxed">
-          Ваше объявление принято и будет опубликовано после проверки. Мы
-          отправим уведомление на ваш email.
+    <div className="max-w-md mx-auto px-4 py-20 text-center">
+      <div className="surface rounded-xl p-10">
+        <div className="w-12 h-12 rounded-full bg-[var(--green)]/15 flex items-center justify-center mx-auto mb-5">
+          <svg className="w-6 h-6 text-[var(--green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h1 className="text-xl font-bold mb-2">Объявление отправлено</h1>
+        <p className="text-[var(--text-secondary)] text-sm mb-8">
+          Будет опубликовано после проверки. Уведомление придёт на email.
         </p>
         <div className="flex justify-center gap-3">
-          <Link
-            href="/"
-            className="gradient-primary btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-orange-200 hover:shadow-lg transition-all"
-          >
-            На главную
+          <Link href="/" className="btn-primary px-5 py-2 rounded-lg text-sm">
+            Главная
           </Link>
-          <Link
-            href="/listings"
-            className="glass hover:bg-white/90 text-gray-700 px-6 py-2.5 rounded-full font-semibold transition-all"
-          >
-            Все объявления
+          <Link href="/listings" className="btn-ghost px-5 py-2 rounded-lg text-sm">
+            Объявления
           </Link>
         </div>
       </div>

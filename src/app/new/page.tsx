@@ -47,23 +47,21 @@ export default function NewListingPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">
-        <span className="gradient-text">Подать объявление</span>
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Подать объявление</h1>
 
       {error && (
-        <div className="bg-red-50/80 backdrop-blur border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
+        <div className="surface border-[var(--red)]/30 text-[var(--red)] px-4 py-3 rounded-lg mb-6 text-sm">
           {error}
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="glass-strong rounded-2xl p-6 space-y-5 shadow-lg shadow-violet-100/20"
+        className="surface rounded-xl p-6 space-y-5"
       >
         {/* Type */}
         <fieldset>
-          <legend className="text-sm font-medium text-gray-700 mb-2">
+          <legend className="text-sm font-medium text-[var(--text-secondary)] mb-2">
             Тип объявления *
           </legend>
           <div className="flex gap-4">
@@ -89,7 +87,7 @@ export default function NewListingPage() {
 
         {/* Animal */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Животное *
           </label>
           <select
@@ -97,7 +95,7 @@ export default function NewListingPage() {
             required
             value={selectedAnimal}
             onChange={(e) => setSelectedAnimal(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
           >
             <option value="">Выберите</option>
             {ANIMAL_OPTIONS.map((a) => (
@@ -110,21 +108,21 @@ export default function NewListingPage() {
 
         {/* Name */}
         <div>
-          <label className="text-sm font-medium text-gray-700">Кличка</label>
+          <label className="text-sm font-medium text-[var(--text-secondary)]">Кличка</label>
           <input
             type="text"
             name="name"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
             placeholder="Необязательно"
           />
         </div>
 
         {/* Sex */}
         <div>
-          <label className="text-sm font-medium text-gray-700">Пол</label>
+          <label className="text-sm font-medium text-[var(--text-secondary)]">Пол</label>
           <select
             name="sex"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
           >
             <option value="">Не знаю</option>
             {SEX_OPTIONS.map((s) => (
@@ -137,10 +135,10 @@ export default function NewListingPage() {
 
         {/* Breed */}
         <div>
-          <label className="text-sm font-medium text-gray-700">Порода</label>
+          <label className="text-sm font-medium text-[var(--text-secondary)]">Порода</label>
           <select
             name="breed"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
           >
             <option value="">Выберите породу</option>
             {(selectedAnimal === "кошка"
@@ -158,12 +156,12 @@ export default function NewListingPage() {
 
         {/* Color */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Цвет / окрас
           </label>
           <select
             name="color"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
           >
             <option value="">Выберите окрас</option>
             {COLOR_OPTIONS.map((c) => (
@@ -176,12 +174,12 @@ export default function NewListingPage() {
 
         {/* Age */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Возраст (примерно)
           </label>
           <select
             name="age"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
           >
             <option value="">Не знаю</option>
             {AGE_OPTIONS.map((a) => (
@@ -194,25 +192,25 @@ export default function NewListingPage() {
 
         {/* Event date */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Дата и время (когда пропал / нашли)
           </label>
           <input
             type="text"
             name="event_date"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
             placeholder="Например: 12 апреля 2026, около 18:00"
           />
         </div>
 
         {/* District */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Район Минска
           </label>
           <select
             name="district"
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
           >
             <option value="">Выберите район</option>
             {MINSK_DISTRICTS.map((d) => (
@@ -225,67 +223,67 @@ export default function NewListingPage() {
 
         {/* Features */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Особые приметы
           </label>
           <textarea
             name="features"
             rows={2}
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
             placeholder="Шрам на ухе, ошейник красного цвета..."
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Описание ситуации *
           </label>
           <textarea
             name="description"
             rows={3}
             required
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
             placeholder="Опишите обстоятельства..."
           />
         </div>
 
         {/* Photo */}
         <div>
-          <label className="text-sm font-medium text-gray-700">Фото</label>
+          <label className="text-sm font-medium text-[var(--text-secondary)]">Фото</label>
           <input
             type="file"
             name="photo"
             accept="image/jpeg,image/png"
             className="mt-1 block w-full text-sm"
           />
-          <p className="text-xs text-gray-400 mt-1">JPG или PNG, до 5 МБ</p>
+          <p className="text-xs text-[var(--text-muted)] mt-1">JPG или PNG, до 5 МБ</p>
         </div>
 
         {/* Contact */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Контакт (телефон или @username) *
           </label>
           <input
             type="text"
             name="contact"
             required
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
             placeholder="+375291234567 или @username"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-[var(--text-secondary)]">
             Email для уведомления *
           </label>
           <input
             type="email"
             name="email"
             required
-            className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="mt-1 block w-full bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)]"
             placeholder="your@email.com"
           />
         </div>
@@ -293,7 +291,7 @@ export default function NewListingPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full gradient-primary btn-shimmer disabled:opacity-50 text-white py-3 rounded-full font-semibold shadow-md shadow-orange-200 hover:shadow-lg hover:shadow-orange-300 transition-all text-base"
+          className="w-full btn-primary disabled:opacity-50 py-3 rounded-lg text-sm"
         >
           {submitting ? "Отправка..." : "Подать объявление"}
         </button>

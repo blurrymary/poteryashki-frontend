@@ -17,54 +17,56 @@ async function getLatestListings(): Promise<Listing[]> {
   return (data as Listing[]) || [];
 }
 
+async function getCounts() {
+  const { count: lost } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active").eq("type", "lost");
+  const { count: found } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active").eq("type", "found");
+  const { count: total } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("moderation_status", "approved").eq("status", "active");
+  return { lost: lost || 0, found: found || 0, total: total || 0 };
+}
+
 export default async function HomePage() {
-  const listings = await getLatestListings();
+  const [listings, counts] = await Promise.all([getLatestListings(), getCounts()]);
 
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        {/* Decorative blobs */}
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl" />
-        <div className="absolute -top-10 -right-20 w-80 h-80 bg-violet-300/20 rounded-full blur-3xl" />
-
-        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-20 text-center">
-          <div className="animate-fade-in">
-            <span className="text-5xl md:text-6xl inline-block animate-float">
-              🐾
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mt-4 animate-fade-in">
-            <span className="gradient-text">Потеряшки BY</span>
+      <section className="border-b border-[var(--border)]">
+        <div className="max-w-6xl mx-auto px-4 py-20 md:py-28">
+          <p className="text-[var(--accent)] text-sm font-medium tracking-wide uppercase mb-4">
+            Агрегатор объявлений
+          </p>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] max-w-2xl">
+            Помогаем находить
+            <br />
+            <span className="gradient-text">пропавших питомцев</span>
           </h1>
-          <p className="text-gray-500 text-lg md:text-xl mt-3 max-w-md mx-auto animate-fade-in-delay">
-            Помогаем находить пропавших питомцев в&nbsp;Беларуси
+          <p className="text-[var(--text-secondary)] text-lg mt-5 max-w-lg">
+            Автоматический мониторинг Telegram-каналов Беларуси. Все объявления о пропавших и найденных животных в одном месте.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 mt-8 animate-fade-in-delay-2">
-            <Link
-              href="/listings?type=lost"
-              className="badge-lost btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-red-200 hover:shadow-lg hover:shadow-red-300 hover:scale-105 transition-all flex items-center gap-2"
-            >
-              <span>🔍</span> Пропавшие
+          {/* Stats */}
+          <div className="flex gap-8 mt-10">
+            <div>
+              <p className="text-3xl font-bold">{counts.total}</p>
+              <p className="text-[var(--text-muted)] text-sm mt-0.5">объявлений</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-[var(--red)]">{counts.lost}</p>
+              <p className="text-[var(--text-muted)] text-sm mt-0.5">ищут хозяина</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-[var(--green)]">{counts.found}</p>
+              <p className="text-[var(--text-muted)] text-sm mt-0.5">найдены</p>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="flex gap-3 mt-10">
+            <Link href="/listings" className="btn-primary px-5 py-2.5 rounded-lg text-sm">
+              Смотреть объявления
             </Link>
-            <Link
-              href="/listings?type=found"
-              className="badge-found btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-green-200 hover:shadow-lg hover:shadow-green-300 hover:scale-105 transition-all flex items-center gap-2"
-            >
-              <span>✅</span> Найденные
-            </Link>
-            <Link
-              href="/listings?type=give_away"
-              className="badge-give btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300 hover:scale-105 transition-all flex items-center gap-2"
-            >
-              <span>💝</span> Отдам в добрые руки
-            </Link>
-            <Link
-              href="/listings?type=help"
-              className="bg-gradient-to-r from-amber-500 to-orange-500 btn-shimmer text-white px-6 py-2.5 rounded-full font-semibold shadow-md shadow-amber-200 hover:shadow-lg hover:shadow-amber-300 hover:scale-105 transition-all flex items-center gap-2"
-            >
-              <span>🩺</span> Нужна помощь
+            <Link href="/new" className="btn-ghost px-5 py-2.5 rounded-lg text-sm">
+              Подать объявление
             </Link>
           </div>
         </div>
@@ -74,16 +76,14 @@ export default async function HomePage() {
       <MapSection />
 
       {/* Latest listings */}
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">
-            <span className="gradient-text-warm">Последние объявления</span>
-          </h2>
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-lg font-semibold">Последние объявления</h2>
           <Link
             href="/listings"
-            className="text-violet-500 hover:text-violet-600 text-sm font-medium transition-colors"
+            className="text-[var(--accent)] hover:text-[var(--accent-hover)] text-sm transition-colors"
           >
-            Смотреть все &rarr;
+            Все объявления &rarr;
           </Link>
         </div>
 
@@ -94,11 +94,9 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="glass rounded-2xl text-center py-16 text-gray-500">
-            <p className="text-5xl mb-4 animate-float">🐾</p>
-            <p className="text-lg font-medium">
-              Объявлений пока нет. Скоро появятся!
-            </p>
+          <div className="surface rounded-xl text-center py-20 text-[var(--text-muted)]">
+            <p className="text-lg">Объявлений пока нет</p>
+            <p className="text-sm mt-1">Парсер работает — скоро появятся</p>
           </div>
         )}
       </section>
